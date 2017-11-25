@@ -87,7 +87,7 @@ function Dial
       echo
       read -p "   Enter a number: " Response
       case $Response in
-        1) gksu "${Installer}" dialog
+        1) sudo "${Installer}" yad gksu
           break
         ;;
         2) print_heading
@@ -99,7 +99,7 @@ function Dial
           echo; echo "  Would you like to proceed with installation"; echo
           read -p "  using: $Installer? (y/N): " Response
           case $Response in
-            "y" | "Y") gksu "${Installer}" yad
+            "y" | "Y") sudo "${Installer}" yad gksu
               break
             ;;
             *) echo; echo "Sorry to see you go"; echo

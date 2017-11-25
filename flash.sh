@@ -25,12 +25,17 @@ function main
   
   if [ -z "$(whereis yad | cut -d':' -f2)" ] && [ -f firstrun.sh ]; then
     source firstrun.sh
-    Dial
-    rm firstrun.sh
+    Dial    # Will install Yad and gksu
   elif [ -z "$(whereis yad | cut -d':' -f2)" ]; then
-    wget -q https://github.com/angeltoast/FlashUSB/firstrun.sh
+    wget https://github.com/angeltoast/FlashUSB/blob/master/firstrun.sh
+    source firstrun.sh
+    Dial    # Will install Yad and gksu
   fi
-
+  
+  if [ -f firstrun.sh ]; then
+    rm firstrun.sh
+  fi
+    
   while true
   do
     PrepareDeviceList # ${LongList} is set
