@@ -22,9 +22,9 @@
 
 function main
 {
-
+  while true
+  do
     PrepareDeviceList # ${LongList} is set
-    
     Result=$(yad --form \
       --window-icon=flash.png \
       --width=600 \
@@ -52,7 +52,7 @@ function main
     ;;
     "Format device") FormatDevice
     esac
-     
+  done
 } # main
 
 function PrepareDeviceList
@@ -114,11 +114,11 @@ function BurnISO
   if [ $exitstatus -eq 2 ]; then return; fi
   
   # Validate ISOpath
-  if [ ! "$(file -k $ISOpath | grep 'CD-ROM filesystem data')" ]; then
+  if [ $(file -k "$ISOpath" | grep 'CD-ROM filesystem data') = "" ]; then
     Title="$Action"
     Message="\n $ISOpath does not appear to be a valid image file.\n If you continue with this file, you may not get an installable system.\n Do you wish to continue with this file?"
     YesNo
-    if [ $exitstatus -eq 2 ]; then return; fi
+    if [ $exitstatus -ne 0 ]; then return; fi
   fi
   
   ISOpath=$(echo $ISOpath | tr '|' ' ')
