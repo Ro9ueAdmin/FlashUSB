@@ -1,0 +1,13 @@
+              FlashUSB tool for USB flashdrives
+              ---------------------------------
+
+      NOT READY FOR GENERAL USE - NOT READY FOR GENERAL USE  
+----------------------------------------------------------------------
+This script is in the early stages of development and HAS BUGS.
+You can help by reporting any bugs through the project's discussion page, or by email
+----------------------------------------------------------------------
+FlashUSB is an interactive script with a simple giu --written in Bash and Yad. It should work across all distros - but this CANNOT BE GUARANTEED.
+----------------------------------------------------------------------
+Elizabeth Mills
+liz@feliz.one
+November 2017
