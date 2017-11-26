@@ -36,28 +36,34 @@ function Dial
     read -p "  Would you like to try? (y/N): " Response
     case $Response in
     "y" | "Y") # First make a reasoned guess of the install command based on distro
+      Distro=$(grep "^NAME" /etc/*-release | cut -d'"' -f2 | cut -d' ' -f1)
       distro="${Distro,,}"                # Convert to all lower case for matching
       case $distro in                     # Try to prepare install command
-      "arch*" | "antergos" | "Manjaro") Installer="pacman -S"
-        Updater="pacman -Syu"
-      ;;
-      "centos" | "red hat") Installer="yum install"
-        Updater="yum -y update && yum -y upgrade"
-      ;;
-      "debian" | "ubuntu" | "knoppix" | "*mint" | "sparky*") Installer="apt-get install"
-        Updater="apt-get update && apt-get upgrade"
-      ;;
-      "fedora") Installer="dnf install"
-        Updater="dnf update"
-      ;;
-      "mageia") Installer="urpmi"
-        Updater="urpmi --auto-update"
-      ;;
-      "suse" | "opensuse") Installer="zypper install"
-        Updater="zypper update"
-      ;;
-      *) Installer=""
-        Updater=""
+        "arch" | "archlinux" | "antergos" | "Manjaro") PackageManager="pacman"
+          Installer="pacman -S"
+          Updater="pacman -Syu"
+        ;;
+        "centos" | "red hat")  PackageManager="yum"
+          Installer="yum install"
+          Updater="yum -y update && yum -y upgrade"
+        ;;
+        "debian" | "ubuntu" | "knoppix" | "*mint" | "sparky*") PackageManager="apt-get"
+          Installer="apt-get install"
+          Updater="apt-get update && apt-get upgrade"
+        ;;
+        "fedora")  PackageManager="dnf"
+          Installer="dnf install"
+          Updater="dnf update"
+        ;;
+        "mageia") PackageManager="urpmi"
+          Installer="urpmi"
+          Updater="urpmi --auto-update"
+        ;;
+        "suse" | "opensuse") PackageManager="zypper"
+          Installer="zypper install"
+          Updater="zypper update"
+        ;;
+        *) PackageManager=""; Installer=""; Updater=""
       esac
       print_heading
       if [ "$Installer" = "" ]; then

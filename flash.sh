@@ -31,10 +31,6 @@ function main
     source firstrun.sh
     Dial    # Will install Yad and gksu
   fi
-  
-  if [ -f firstrun.sh ]; then
-    rm firstrun.sh
-  fi
     
   while true
   do
@@ -66,7 +62,9 @@ function main
     ;;
     "Format device") FormatDevice
     esac
+    
   done
+  
 } # main
 
 function PrepareDeviceList
@@ -158,7 +156,6 @@ function BurnISO
 
 function FormatDevice
 {
-    
   Device="${SelectedDevice}:${DeviceName}"
   FormatResult=$(yad --form --separator='\t' \
       --window-icon=flash.png \
@@ -251,8 +248,8 @@ function YesNo # Displays $Message and Yes/No buttons. Sets $exitstatus
       --button=Yes:0 \
       --button=No:1 \
       --text "$Message"
-
     exitstatus=$?                            # Exit status is numeric, 0 to 255
+  
 } # YesNo
 
 main
