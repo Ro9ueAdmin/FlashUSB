@@ -27,6 +27,12 @@
 
 function Dial
 {
+  local distro
+  local Distro
+  local Installer
+  local Updater
+  local Response
+
   while true
   do
     print_heading
@@ -131,6 +137,11 @@ function Dial
 
 function print_heading                   # Always use this function to clear the screen in text mode
 {
+  local T_COLS
+  local LenBT
+  local HalfBT
+  local cursor_row
+
   clear
   T_COLS=$(tput cols)                    # Get width of terminal
   LenBT=${#Backtitle}                    # Length of backtitle
