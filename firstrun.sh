@@ -28,7 +28,6 @@
 function Dial
 {
   local distro
-  local Distro
   local Installer
   local Updater
   local Response
@@ -41,9 +40,8 @@ function Dial
     echo "  However, if you wish, it may be possible to install it now."
     read -p "  Would you like to try? (y/N): " Response
     case $Response in
-    "y" | "Y") # First make a reasoned guess of the install command based on distro
-      Distro=$(grep "^NAME" /etc/*-release | cut -d'"' -f2 | cut -d' ' -f1)
-      distro="${Distro,,}"                # Convert to all lower case for matching
+    "y" | "Y")# First make a reasoned guess of the install command based on distro
+      distro=$(grep "^NAME" /etc/*-release | cut -d'"' -f2 | cut -d' ' -f1 | tr '[:upper:]' '[:lower:]')
       case $distro in                     # Try to prepare install command
         "arch" | "archlinux" | "antergos" | "Manjaro") PackageManager="pacman"
           Installer="pacman -S"
@@ -85,7 +83,7 @@ function Dial
           exit
         fi
       fi
-      echo "      It appears that your system is $Distro"
+      echo "      It appears that your system is $(echo "${distro}" | sed 's/.*/\L&/; s/[a-z]*/\u&/g')"
       echo "     In which case, your installation command"
       echo "              is probably: $Installer"
       echo
