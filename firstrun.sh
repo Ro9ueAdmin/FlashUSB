@@ -104,7 +104,7 @@ EOF
 EOF
       read -p "   Enter a number: " Response
       case $Response in
-        1) sudo "${Installer}" yad gksu
+        1) sudo ${Installer} yad
           break
         ;;
         2) print_heading
@@ -116,7 +116,7 @@ EOF
           echo; echo "  Would you like to proceed with installation"; echo
           read -p "  using: $Installer? (y/N): " Response
           case $Response in
-            "y" | "Y") sudo "${Installer}" yad gksu
+            "y" | "Y") sudo ${Installer} yad
               break
             ;;
             *) echo; echo "Sorry to see you go"; echo
