@@ -27,17 +27,23 @@
 
 function Dial
 {
+  local distro
+  local Installer
+  local Updater
+  local Response
+
   while true
   do
     print_heading
-    echo "  FlasUSB needs the 'Yad' program installed, in order to display"
-    echo "  correctly. You should find it in your distro's package manager."
-    echo "  However, if you wish, it may be possible to install it now."
+    cat <<EOF
+  FlashUSB needs the 'Yad' program installed, in order to display
+  correctly. You should find it in your distro's package manager.
+  However, if you wish, it may be possible to install it now.
+EOF
     read -p "  Would you like to try? (y/N): " Response
     case $Response in
-    "y" | "Y") # First make a reasoned guess of the install command based on distro
-      Distro=$(grep "^NAME" /etc/*-release | cut -d'"' -f2 | cut -d' ' -f1)
-      distro="${Distro,,}"                # Convert to all lower case for matching
+    "y" | "Y")# First make a reasoned guess of the install command based on distro
+      distro=$(grep "^NAME" /etc/*-release | cut -d'"' -f2 | cut -d' ' -f1 | tr '[:upper:]' '[:lower:]')
       case $distro in                     # Try to prepare install command
         "arch" | "archlinux" | "antergos" | "Manjaro") PackageManager="pacman"
           Installer="pacman -S"
@@ -67,30 +73,35 @@ function Dial
       esac
       print_heading
       if [ "$Installer" = "" ]; then
-        echo "   FlashUSB has been unable to determine the install command for your system."
-        echo "        This may be something like 'apt-get install' or 'yum install'"
-        echo "           or 'rpm -i' or 'pacman -S' - depending on your system."
-        echo "  If in doubt, you should not proceed (press [Enter] without typing anything)"
-        echo
+        cat <<EOF
+   FlashUSB has been unable to determine the install command for your system.
+           This may be something like 'apt-get install' or 'yum install'
+           or 'rpm -i' or 'pacman -S' - depending on your system.
+   If in doubt, you should not proceed (press [Enter] without typing anything)"
+
+EOF
         read -p "  Please enter the installation command to use: " Installer
         if [ "$Installer" = "" ]; then
-          echo
-          echo "Sorry to see you go"
+          cat <<EOF
+Sorry to see you go.
+EOF
           exit
         fi
       fi
-      echo "      It appears that your system is $Distro"
-      echo "     In which case, your installation command"
-      echo "              is probably: $Installer"
-      echo
-      echo "    Would you like to proceed with installation"
-      echo "              using: $Installer?"
-      echo
-      echo "  Please choose:"
-      echo "   1 to install using using: ${Installer};"
-      echo "   2 for an opportunity to enter a different install command;"
-      echo "   3 to quit FlashUSB"
-      echo
+      cat <<EOF
+      It appears that your system is '$(echo "${distro}" | sed 's/.*/\L&/; s/[a-z]*/\u&/g')'
+     In which case, your installation command
+              is probably: $Installer
+
+    Would you like to proceed with installation
+              using: ${Installer}?
+
+    Please choose:
+     1 to install using: ${Installer};
+     2 for an opportunity to enter a different install command;
+     3 to quit FlashUSB
+
+EOF
       read -p "   Enter a number: " Response
       case $Response in
         1) sudo "${Installer}" yad gksu
@@ -131,6 +142,11 @@ function Dial
 
 function print_heading                   # Always use this function to clear the screen in text mode
 {
+  local T_COLS
+  local LenBT
+  local HalfBT
+  local cursor_row
+
   clear
   T_COLS=$(tput cols)                    # Get width of terminal
   LenBT=${#Backtitle}                    # Length of backtitle
